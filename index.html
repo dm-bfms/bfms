@@ -105,10 +105,73 @@
       max-width: 980px;
     }
     @media (max-width: 760px){
-      .grid{ grid-template-columns: 1fr; gap: 16px; }
-      .sun{ right: 14px; width: 110px; height: 110px; }
-      .cloud.c2, .cloud.c3{ display:none; }
-    }
+  .wrap{
+    padding: 22px 14px 28px;
+  }
+
+  h1{
+    font-size: 34px;
+    margin-bottom: 6px;
+  }
+
+  .subtitle{
+    font-size: 16px;
+    margin-bottom: 18px;
+  }
+
+  /* Make buttons a tight 2x2 grid */
+  .grid{
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 12px;
+    margin: 16px auto 14px;
+  }
+
+  /* Shorter buttons */
+  .feel-btn{
+    min-height: 92px;
+    padding: 14px 10px;
+    border-radius: 18px;
+  }
+
+  .feel-label{
+    font-size: 18px;
+    gap: 10px;
+    padding: 0;
+  }
+
+  .emoji{
+    font-size: 1.05em;
+  }
+
+  /* Reduce spacing below buttons */
+  .panel{
+    gap: 10px;
+  }
+
+  .card{
+    padding: 12px 12px;
+    border-radius: 16px;
+  }
+
+  /* Smaller player + transcript */
+  .status{
+    font-size: 14px;
+  }
+
+  .transcript{
+    font-size: 18px;
+    min-height: 56px;
+    padding: 12px 10px;
+  }
+
+  /* Decorative things: smaller sun, hide extra clouds */
+  .sun{
+    right: 12px;
+    width: 92px;
+    height: 92px;
+  }
+  .cloud.c2, .cloud.c3{ display:none; }
+}
 
     /* Buttons */
     .feel-btn{
@@ -358,6 +421,7 @@
   </script>
 </body>
 </html>
+
 
 
 
