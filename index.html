@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bright Feelings Message Station</title>
+
+  <!-- Fredoka -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --ink: #2f3a45;
+      --shadow: 0 16px 30px rgba(0,0,0,0.10);
+      --shadow2: 0 10px 18px rgba(0,0,0,0.10);
+    }
+
+    * { box-sizing: border-box; }
+    body{
+      margin: 0;
+      font-family: "Fredoka", system-ui, Arial, sans-serif;
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: linear-gradient(180deg, #8fd3ff 0%, #bfe8ff 45%, #e9fbff 100%);
+    }
+
+    /* Decorative sky elements */
+    .sky{
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .sun{
+      position: absolute;
+      top: 28px;
+      right: 48px;
+      width: 140px;
+      height: 140px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 35% 35%, #ffe07a 0%, #ffc542 40%, #ffb320 70%, #ffa800 100%);
+      filter: drop-shadow(0 14px 18px rgba(255, 174, 0, 0.25));
+    }
+
+    .cloud{
+      position: absolute;
+      width: 170px;
+      height: 60px;
+      background: rgba(255,255,255,0.85);
+      border-radius: 999px;
+      filter: drop-shadow(0 10px 16px rgba(0,0,0,0.08));
+    }
+    .cloud::before,
+    .cloud::after{
+      content:"";
+      position:absolute;
+      background: rgba(255,255,255,0.85);
+      border-radius: 999px;
+    }
+    .cloud::before{
+      width: 75px; height: 75px;
+      left: 18px; top: -30px;
+    }
+    .cloud::after{
+      width: 95px; height: 95px;
+      left: 70px; top: -44px;
+    }
+    .cloud.c1{ top: 62px; left: 55px; transform: scale(1.05); }
+    .cloud.c2{ top: 140px; left: 64%; transform: scale(0.95); }
+    .cloud.c3{ top: 210px; left: 76%; transform: scale(0.85); }
+
+    /* Layout */
+    .wrap{
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 44px 18px 52px;
+      text-align: center;
+    }
+
+    h1{
+      margin: 0 0 10px;
+      font-size: clamp(34px, 4.2vw, 62px);
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      text-shadow: 0 2px 0 rgba(255,255,255,0.65);
+    }
+    .subtitle{
+      margin: 0 auto 34px;
+      max-width: 980px;
+      font-size: clamp(16px, 1.6vw, 26px);
+      font-weight: 400;
+      opacity: 0.92;
+    }
+
+    .grid{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 26px 34px;
+      margin: 24px auto 26px;
+      max-width: 980px;
+    }
+    @media (max-width: 760px){
+      .grid{ grid-template-columns: 1fr; gap: 16px; }
+      .sun{ right: 14px; width: 110px; height: 110px; }
+      .cloud.c2, .cloud.c3{ display:none; }
+    }
+
+    /* Buttons */
+    .feel-btn{
+      border: none;
+      width: 100%;
+      padding: 26px 20px;
+      border-radius: 22px;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: transform 120ms ease, filter 120ms ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 130px;
+    }
+    .feel-btn:active{ transform: translateY(1px) scale(0.995); }
+    .feel-btn:hover{ filter: brightness(1.02); }
+
+    .feel-label{
+      font-size: clamp(22px, 2.4vw, 34px);
+      font-weight: 600;
+      color: #fff;
+      text-shadow: 0 3px 0 rgba(0,0,0,0.10);
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.05;
+      padding: 0 10px;
+    }
+    .emoji{
+      font-size: 1.05em;
+      filter: drop-shadow(0 2px 0 rgba(0,0,0,0.10));
+    }
+
+    /* Color themes approximating your Canva */
+    .sad{
+      background: linear-gradient(135deg, #5f7cff 0%, #6a5acd 55%, #5b49c8 100%);
+    }
+    .frustrated{
+      background: linear-gradient(135deg, #ff8fe7 0%, #ff79bd 45%, #ff5c74 100%);
+    }
+    .lonely{
+      background: linear-gradient(135deg, #35b5ff 0%, #35d6ff 55%, #22c7f2 100%);
+    }
+    .anxious{
+      background: linear-gradient(135deg, #44e07c 0%, #46f0bf 55%, #2de9c7 100%);
+    }
+
+    /* Player + transcript */
+    .panel{
+      max-width: 980px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      text-align: left;
+    }
+
+    .card{
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(255,255,255,0.55);
+      border-radius: 18px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(8px);
+    }
+
+    .status{
+      font-size: 16px;
+      font-weight: 500;
+      min-height: 22px;
+    }
+    audio{
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .transcript-title{
+      font-size: 14px;
+      font-weight: 600;
+      opacity: 0.75;
+      margin-bottom: 6px;
+    }
+    .transcript{
+      white-space: pre-wrap;
+      font-size: 18px;
+      line-height: 1.35;
+      min-height: 54px;
+    }
+    .hint{
+      font-size: 13px;
+      opacity: 0.65;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="sky" aria-hidden="true">
+    <div class="sun"></div>
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+  </div>
+
+  <div class="wrap">
+    <h1>Bright Feelings Message Station</h1>
+    <p class="subtitle">Choose how you're feeling today to listen to a positive message from a student.</p>
+
+    <div class="grid">
+      <button class="feel-btn sad" onclick="playRandom('sad')">
+        <div class="feel-label"><span class="emoji">😢</span>Feeling Sad</div>
+      </button>
+
+      <button class="feel-btn frustrated" onclick="playRandom('frustrated')">
+        <div class="feel-label"><span class="emoji">😤</span>Feeling<br>Frustrated</div>
+      </button>
+
+      <button class="feel-btn lonely" onclick="playRandom('lonely')">
+        <div class="feel-label"><span class="emoji">😔</span>Feeling Lonely</div>
+      </button>
+
+      <button class="feel-btn anxious" onclick="playRandom('anxious')">
+        <div class="feel-label"><span class="emoji">😰</span>Feeling Anxious</div>
+      </button>
+    </div>
+
+    <div class="panel">
+      <div class="card">
+        <div class="status" id="status">Tap a button to hear a message.</div>
+        <audio id="player" controls></audio>
+      </div>
+
+      <div class="card">
+        <div class="transcript-title">Transcript</div>
+        <div class="transcript" id="transcript">The words will appear here when a message plays.</div>
+        <div class="hint">
+          Tip: put transcript files next to the audio files using the same name, like:
+          <b>audio/sad_01.mp3</b> and <b>audio/sad_01.txt</b>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Add more files any time. The page will randomly choose one in that category.
+    const clips = {
+  sad: [
+    "audio/sad_01.mp3",
+    "audio/sad_02.mp3",
+    "audio/sad_03.mp3",
+    "audio/sad_04.mp3",
+    "audio/sad_05.mp3",
+    "audio/sad_06.mp3",
+  ],
+  lonely: [
+    "audio/lonely_01.mp3",
+    "audio/lonely_02.mp3",
+    "audio/lonely_03.mp3",
+    "audio/lonely_04.mp3",
+    "audio/lonely_05.mp3",
+    "audio/lonely_06.mp3",
+  ],
+  frustrated: [
+    "audio/frustrated_01.mp3",
+    "audio/frustrated_02.mp3",
+    "audio/frustrated_03.mp3",
+    "audio/frustrated_04.mp3",
+    "audio/frustrated_05.mp3",
+    "audio/frustrated_06.mp3",
+  ],
+  anxious: [
+    "audio/anxious_01.mp3",
+    "audio/anxious_02.mp3",
+    "audio/anxious_03.mp3",
+    "audio/anxious_04.mp3",
+    "audio/anxious_05.mp3",
+    "audio/anxious_06.mp3",
+  ],
+};
+
+    function pick(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function transcriptPathFromAudio(audioPath) {
+      // Assumes transcript lives alongside audio and is named the same, but .txt
+      // e.g., audio/sad_01.mp3 -> audio/sad_01.txt
+      return audioPath.replace(/\.(mp3|m4a|wav)$/i, ".txt");
+    }
+
+    async function loadTranscript(audioPath) {
+      const transcriptEl = document.getElementById("transcript");
+      const path = transcriptPathFromAudio(audioPath);
+
+      transcriptEl.textContent = "Loading transcript…";
+
+      try {
+        const res = await fetch(path, { cache: "no-store" });
+        if (!res.ok) throw new Error("Transcript not found");
+        const text = await res.text();
+        transcriptEl.textContent = text.trim() || "(Transcript file is empty.)";
+      } catch (e) {
+        transcriptEl.textContent =
+          "No transcript found for this message yet.\n\n" +
+          "If you want one, create: " + path;
+      }
+    }
+
+    async function playRandom(category) {
+      const player = document.getElementById("player");
+      const status = document.getElementById("status");
+
+      const file = pick(clips[category]);
+      player.src = file;
+
+      // Update transcript
+      loadTranscript(file);
+
+      status.textContent = "Playing a message… (tap again for a different one)";
+      player.play().catch(() => {
+        // If autoplay is blocked, user can press play in the controls.
+        status.textContent = "Press play ▶ if your browser didn’t start it automatically.";
+      });
+
+      player.onended = () => {
+        status.textContent = "Want another? Tap the same button again.";
+      };
+    }
+  </script>
+</body>
+</html>
